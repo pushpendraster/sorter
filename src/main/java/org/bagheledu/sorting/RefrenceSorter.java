@@ -173,14 +173,22 @@ public class RefrenceSorter<T> implements Sorter<T> {
 		return in;
 	}
 
+	/*
+	 * This sort algorithm works on logical division of the list into sorted (left)
+	 * and unsorted (right) regions. It starts with zero element in sorted region
+	 * and than iterate over the unsorted region to find out minimum or maximum
+	 * based on sorted direction. Once the minimum element is found that is moved to
+	 * the beginning of the list in sorted region. This continues until all the
+	 * elements have moved to the sorted region.
+	 */
 	private List<T> selectionSort(List<T> in, Comparator<T> comparator, SortDirection direction) {
 		for (int j = 0; j < in.size(); j++) {
 			int minIndex = j;
-			for (int i = j+1; i < in.size(); i++) {
+			for (int i = j + 1; i < in.size(); i++) {
 				if ((direction.equals(SortDirection.ASC) && comparator.compare(in.get(minIndex), in.get(i)) >= 0)
 						|| (direction.equals(SortDirection.DESC)
 								&& comparator.compare(in.get(minIndex), in.get(i)) <= 0)) {
-					minIndex =i;
+					minIndex = i;
 				}
 			}
 			if (minIndex != j) {
@@ -189,6 +197,11 @@ public class RefrenceSorter<T> implements Sorter<T> {
 				in.set(j, minVal);
 			}
 		}
+		return in;
+	}
+
+	private List<T> heapSort(List<T> in, Comparator<T> comparator, SortDirection direction) {
+
 		return in;
 	}
 }
