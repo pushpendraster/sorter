@@ -39,6 +39,8 @@ public class RefrenceSorter<T> implements Sorter<T> {
 			sortedList = mergeSortAlgo(collection, comparator, direction);
 		case INSERTION_SORT:
 			sortedList = insertionSort(collection, comparator, direction);
+		case SELECTION_SORT:
+			sortedList = selectionSort(collection, comparator, direction);
 		default:
 			break;
 		}
@@ -172,12 +174,21 @@ public class RefrenceSorter<T> implements Sorter<T> {
 	}
 
 	private List<T> selectionSort(List<T> in, Comparator<T> comparator, SortDirection direction) {
-		List<T> sortedList = new ArrayList<T>();
-		for (int i = 0; i < in.size(); i++) {
-			T min =in.get(i);
-			//if(comparator.compare(min, min))
+		for (int j = 0; j < in.size(); j++) {
+			int minIndex = j;
+			for (int i = j+1; i < in.size(); i++) {
+				if ((direction.equals(SortDirection.ASC) && comparator.compare(in.get(minIndex), in.get(i)) >= 0)
+						|| (direction.equals(SortDirection.DESC)
+								&& comparator.compare(in.get(minIndex), in.get(i)) <= 0)) {
+					minIndex =i;
+				}
+			}
+			if (minIndex != j) {
+				T minVal = in.get(minIndex);
+				in.set(minIndex, in.get(j));
+				in.set(j, minVal);
+			}
 		}
-
-		return sortedList;
+		return in;
 	}
 }
