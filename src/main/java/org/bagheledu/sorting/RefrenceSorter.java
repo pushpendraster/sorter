@@ -41,6 +41,8 @@ public class RefrenceSorter<T> implements Sorter<T> {
 			sortedList = insertionSort(collection, comparator, direction);
 		case SELECTION_SORT:
 			sortedList = selectionSort(collection, comparator, direction);
+		case HEAP_SORT:
+			sortedList = new HeapSort<T>().sort(collection, direction, algo, comparator);
 		default:
 			break;
 		}
