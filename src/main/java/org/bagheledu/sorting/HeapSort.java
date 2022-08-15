@@ -15,39 +15,58 @@ public class HeapSort<T> implements Sorter<T> {
 	@Override
 	public List<T> sort(List<T> inputList, SortDirection direction, SortingAlgo algo, Comparator<T> comparator) {
 
-		for (int i = 0; i < inputList.size(); i++) {
-			heapify(0, inputList.subList(0, inputList.size() - i), direction, algo, comparator);
-			T indexT = inputList.get(0);
-			inputList.set(0, inputList.get(inputList.size() - 1 - i));
-			inputList.set(inputList.size() - 1 - i, indexT);
+		// build heap...
+		for (int i = inputList.size() / 2 - 1; i >=0; i--) {
+			heapify(i, inputList, direction, algo, comparator);
+		}
+
+		for (int i = inputList.size() - 1; i > 0; i--) {
+			T temp = inputList.get(0);
+			inputList.set(0, inputList.get(i));
+			inputList.set(i, temp);
+			heapify(0, inputList.subList(0, i), direction, algo, comparator);
 		}
 		return inputList;
 	}
 
 	private void heapify(int rootIndex, List<T> inputList, SortDirection direction, SortingAlgo algo,
 			Comparator<T> comparator) {
+		int largest = rootIndex;
+		int insize = inputList.size();
+		int l = rootIndex * 2 + 1;
+		int r = rootIndex * 2 + 2;
 
-		if (hasChidlren(rootIndex, inputList)) {
-			T root = inputList.get(rootIndex);
-			T leftT = inputList.get(2 * rootIndex + 1);
-			if (hasRightNode(rootIndex, inputList)) {
-				T rightT = inputList.get(2 * rootIndex + 2);
-				if (comparator.compare(leftT, rightT) >= 0 && comparator.compare(root, leftT) <= 0) {
-					inputList.set(rootIndex, leftT);
-					inputList.set(2 * rootIndex + 1, root);
-					heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
-				} else if (comparator.compare(rightT, leftT) >= 0 && comparator.compare(root, rightT) <= 0) {
-					inputList.set(rootIndex, rightT);
-					inputList.set(2 * rootIndex + 2, root);
-					heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
-				}
-			} else if (comparator.compare(root, leftT) <= 0) {
-				inputList.set(rootIndex, leftT);
-				inputList.set(2 * rootIndex + 1, root);
-				heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
-			}
-
+		if (l < insize && ((SortDirection.ASC.equals(direction) && comparator.compare(inputList.get(l), inputList.get(largest)) >= 0)
+				|| (SortDirection.DESC.equals(direction) && comparator.compare(inputList.get(l), inputList.get(largest)) <= 0))) {
+			largest = l;
 		}
+
+		if (r < insize && ( (SortDirection.ASC.equals(direction) && comparator.compare(inputList.get(r), inputList.get(largest)) >= 0)
+				|| (SortDirection.DESC.equals(direction) && comparator.compare(inputList.get(r), inputList.get(largest)) <= 0))) {
+			largest = r;
+		}
+
+		if (largest != rootIndex) {
+			T swap = inputList.get(rootIndex);
+			inputList.set(rootIndex, inputList.get(largest));
+			inputList.set(largest, swap);
+			heapify(largest, inputList, direction, algo, comparator);
+		}
+
+	}
+
+	private void swapRight(int rootIndex, List<T> inputList, SortDirection direction, SortingAlgo algo,
+			Comparator<T> comparator, T root, T rightT) {
+		inputList.set(rootIndex, rightT);
+		inputList.set(2 * rootIndex + 2, root);
+		heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
+	}
+
+	private void swapLeft(int rootIndex, List<T> inputList, SortDirection direction, SortingAlgo algo,
+			Comparator<T> comparator, T root, T leftT) {
+		inputList.set(rootIndex, leftT);
+		inputList.set(2 * rootIndex + 1, root);
+		heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
 	}
 
 	private boolean hasChidlren(int nodeIndex, List<T> inputList) {
