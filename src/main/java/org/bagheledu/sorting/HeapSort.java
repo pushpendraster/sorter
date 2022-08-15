@@ -54,39 +54,4 @@ public class HeapSort<T> implements Sorter<T> {
 		}
 
 	}
-
-	private void swapRight(int rootIndex, List<T> inputList, SortDirection direction, SortingAlgo algo,
-			Comparator<T> comparator, T root, T rightT) {
-		inputList.set(rootIndex, rightT);
-		inputList.set(2 * rootIndex + 2, root);
-		heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
-	}
-
-	private void swapLeft(int rootIndex, List<T> inputList, SortDirection direction, SortingAlgo algo,
-			Comparator<T> comparator, T root, T leftT) {
-		inputList.set(rootIndex, leftT);
-		inputList.set(2 * rootIndex + 1, root);
-		heapify(2 * rootIndex + 1, inputList, direction, algo, comparator);
-	}
-
-	private boolean hasChidlren(int nodeIndex, List<T> inputList) {
-		return (2 * nodeIndex + 2 < inputList.size()) || (2 * nodeIndex + 1 < inputList.size()) ? true : false;
-	}
-
-	private boolean isChildNode(int nodeIndex, List<T> inputList) {
-		return (nodeIndex - 1) / 2 >= 0 ? true : false;
-	}
-
-	private boolean isRootNode(int nodeIndex) {
-		return nodeIndex == 0 ? true : false;
-	}
-
-	private boolean hasRightNode(int nodeIndex, List<T> inputList) {
-		return (2 * nodeIndex + 2 < inputList.size()) ? true : false;
-	}
-
-	private void siftDown(List<T> inputList, SortDirection direction, SortingAlgo algo, Comparator<T> comparator) {
-
-	}
-
 }
